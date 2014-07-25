@@ -30,7 +30,6 @@
   return self;
 }
 
-
 - (void)viewDidLoad
 {
   [super viewDidLoad];
@@ -42,11 +41,14 @@
   if (self.firstRun) {
     self.firstRun = NO;
 
-    self.assetsPickerController = [TSAssetsPickerController new];
-    self.assetsPickerController.delegate = self;
-    self.assetsPickerController.dataSource = self;
-    [self presentViewController:self.assetsPickerController animated:NO completion:nil];
+    [self openAssetPicker];
   }
+}
+
+#pragma mark - Actions
+
+- (IBAction)didTouchOpenButton:(id)sender {
+  [self openAssetPicker];
 }
 
 #pragma mark - TSAssetsPickerControllerDataSource
@@ -64,8 +66,8 @@
 
   GalleryViewController *galleryViewController = [[GalleryViewController alloc] init];
   galleryViewController.assets = self.adaptedAssets;
-//  [self dismissViewControllerAnimated:NO completion:nil];
-  [self.assetsPickerController pushViewController:galleryViewController animated:YES];
+  [self dismissViewControllerAnimated:NO completion:nil];
+  [self.navigationController pushViewController:galleryViewController animated:YES];
 }
 
 - (void)assetsPickerControllerDidCancel:(TSAssetsPickerController *)picker {
@@ -84,6 +86,18 @@
 
 - (TSFilter *)filterOfAssetsPickerController:(TSAssetsPickerController *)picker {
   return [TSFilter filterWithType:FilterTypePhoto];
+}
+
+#pragma mark - Private
+
+- (void)openAssetPicker {
+  if (!self.assetsPickerController) {
+    self.assetsPickerController = [TSAssetsPickerController new];
+    self.assetsPickerController.delegate = self;
+    self.assetsPickerController.dataSource = self;
+  }
+  
+  [self presentViewController:self.assetsPickerController animated:NO completion:nil];
 }
 
 @end
