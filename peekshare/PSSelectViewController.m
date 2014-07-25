@@ -45,7 +45,7 @@
     self.assetsPickerController = [TSAssetsPickerController new];
     self.assetsPickerController.delegate = self;
     self.assetsPickerController.dataSource = self;
-    [self presentViewController:self.assetsPickerController animated:YES completion:nil];
+    [self presentViewController:self.assetsPickerController animated:NO completion:nil];
   }
 }
 
@@ -65,7 +65,7 @@
   GalleryViewController *galleryViewController = [[GalleryViewController alloc] init];
   galleryViewController.assets = self.adaptedAssets;
 //  [self dismissViewControllerAnimated:NO completion:nil];
-  [self.assetsPickerController presentViewController:galleryViewController animated:NO completion:nil];
+  [self.assetsPickerController pushViewController:galleryViewController animated:YES];
 }
 
 - (void)assetsPickerControllerDidCancel:(TSAssetsPickerController *)picker {
