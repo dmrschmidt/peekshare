@@ -1,0 +1,10 @@
+PODS:
+  - TSAssetsPickerController (1.2)
+
+DEPENDENCIES:
+  - TSAssetsPickerController
+
+SPEC CHECKSUMS:
+  TSAssetsPickerController: 5ffe9a8eef12408b78250ba7960154ea1adb72cd
+
+COCOAPODS: 0.33.1
