@@ -73,9 +73,19 @@
     BOOL    callDidChangedFirstly;
     BOOL    viewVisibleNow;
 }
+@property(nonatomic) BOOL shouldHideStatusBar;
 @end
 
 @implementation ASGalleryViewController
+
+- (BOOL)prefersStatusBarHidden
+{
+  return self.shouldHideStatusBar;
+}
+
+- (UIStatusBarAnimation)preferredStatusBarUpdateAnimation {
+  return UIStatusBarAnimationSlide;
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -468,8 +478,10 @@
 {
     pagingScrollView.scrollEnabled = YES;
     playBackStarted = NO;
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
-
+    self.shouldHideStatusBar = YES;
+    [UIView animateWithDuration:UINavigationControllerHideShowBarDuration animations:^{
+        [self setNeedsStatusBarAppearanceUpdate];
+    }];
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
@@ -493,9 +505,12 @@
     
     if (!hideControls) {
         hideControls = YES;
-        
-        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
-        
+
+        self.shouldHideStatusBar = YES;
+        [UIView animateWithDuration:UINavigationControllerHideShowBarDuration animations:^{
+            [self setNeedsStatusBarAppearanceUpdate];
+        }];
+
         __unsafe_unretained ASGalleryViewController* SELF = self;
         
         if ([SELF.delegate respondsToSelector:@selector(menuBarsWillDisappearInGalleryController:)])
@@ -515,6 +530,10 @@
         }completion:^(BOOL finished) {
             
             [self.navigationController setNavigationBarHidden:YES animated:NO];
+            self.shouldHideStatusBar = YES;
+            [UIView animateWithDuration:UINavigationControllerHideShowBarDuration animations:^{
+                [self setNeedsStatusBarAppearanceUpdate];
+            }];
             pagingScrollView.frame = [self frameForPagingScrollView];
 
             if ([SELF.delegate respondsToSelector:@selector(menuBarsDidDisappearInGalleryController:)])
@@ -530,7 +549,10 @@
     if (hideControls) {
         hideControls = NO;
 
-        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+        self.shouldHideStatusBar = NO;
+        [UIView animateWithDuration:UINavigationControllerHideShowBarDuration animations:^{
+            [self setNeedsStatusBarAppearanceUpdate];
+        }];
         
         [self.navigationController setNavigationBarHidden:NO  animated:NO];
         pagingScrollView.frame = [self frameForPagingScrollView];

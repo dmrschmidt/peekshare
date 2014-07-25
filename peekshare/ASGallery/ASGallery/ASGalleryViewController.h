@@ -82,6 +82,7 @@ typedef void (^ASImageSetBlock)(ASGalleryImageType type, UIImage* image);
 @property(nonatomic,unsafe_unretained) id<ASGalleryViewControllerDelegate> delegate;
 
 @property (nonatomic,strong)     NSMutableSet    *visiblePages;
+@property (nonatomic) BOOL prefersStatusBarHidden;
 
 
 @property(nonatomic,assign) NSUInteger selectedIndex;
